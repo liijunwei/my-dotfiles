@@ -33,10 +33,12 @@ alias pinit="gem install powder&&powder install&&powder link&&powder cleanup&&po
 
 #for git
 alias ginit='git init&&git add .&&git commit -m "Initial Commit"'
-alias glt='git log --oneline --decorate --all --graph --simplify-by-decoration'
+alias glt='git log --oneline --decorate --all --graph --simplsify-by-decoration'
 alias gla='git log --oneline --decorate --all'
 alias g="git status"
+alias gaa="git add ."
 alias gc='git checkout'
+alias gca='git checkout .'
 alias gcb='git checkout -b'
 alias gcm='git checkout master'
 alias gbr='git branch'
