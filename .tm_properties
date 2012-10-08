@@ -1,0 +1,29 @@
+# Settings
+fontName             = "Menlo"
+fontSize             = 15
+softTabs             = true
+tabSize              = 2
+projectDirectory     = "$CWD"
+windowTitle          = "$TM_DIRECTORY/$TM_DISPLAYNAME - ${CWD/^.*\///}"
+TM_ORGANIZATION_NAME = 'xiaolai'
+
+# Variables
+TM_GIT           = "usr/local/bin/git"
+
+[ .git/COMMIT_EDITMSG ]
+softWrap         = true
+spellChecking    = true
+spellingLanguage = 'en'
+
+[ text ]
+softWrap         = true
+spellChecking    = true
+
+[ *.{icns,ico,jpg,jpeg,m4v,nib,pdf,png,psd,pyc,rtf,tif,tiff,xib} ]
+binary           = true
+
+[ "{README,INSTALL,LICENSE,TODO}" ]
+fileType         = "text.plain"
+
+[ "{markdown,md}" ]
+fileType         = "Markdown"
