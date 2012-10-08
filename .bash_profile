@@ -43,6 +43,10 @@ alias gcb='git checkout -b'
 alias gcm='git checkout master'
 alias gbr='git branch'
 alias gcam='git commit -am'
+alias gp='git push'
+alias gpuom='git push -u origin master'
+alias gph='git push heroku'
+alias gphm='git push heroku master'
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
