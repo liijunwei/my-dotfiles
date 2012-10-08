@@ -1,4 +1,11 @@
 
+# lookfor unbind command:
+# bind -l | head -5 
+# bind alias-expand-line to control+e
+# bind "\C-e:alias-expand-line"
+# confirm bind?
+# bind -q alias-expand-line
+
 # Given characters awared history search
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
@@ -63,3 +70,8 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 # for git using TextMate as Editor
 export EDITOR="/usr/local/bin/mate -w"
+
+# find in $directory where $name and open with TextMate
+fmate(){
+  find $1 -type d -name $2 -exec mate {} \;
+}
