@@ -1,4 +1,3 @@
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 # lookfor unbind command:
 # bind -l | head -5 
 # bind alias-expand-line to control+e
@@ -7,17 +6,56 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 # bind -q alias-expand-line
 
 
+
+# export GOPATH=$HOME/go-workspace # don't forget to change your path correctly!
+# export GOROOT=/usr/local/opt/go/libexec
+# export PATH=$PATH:$GOPATH/bin
+# export PATH=$PATH:$GOROOT/bin
+# export GOBIN=$GOPATH/bin
+# export PATH=$PATH:/Library/TeX/texbin
+# export PATH=/usr/local/bin:$PATH
+
+function _update_ps1() {
+    PS1=$(powerline-shell $?)
+}
+
+if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
+# __conda_setup="$(CONDA_REPORT_ERRORS=false '/anaconda3/bin/conda' shell.bash hook 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     \eval "$__conda_setup"
+# else
+#     if [ -f "/anaconda3/etc/profile.d/conda.sh" ]; then
+#         . "/anaconda3/etc/profile.d/conda.sh"
+#         CONDA_CHANGEPS1=false conda activate base
+#     else
+#         \export PATH="/anaconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+
+export PATH="/anaconda3/bin:$PATH"
+
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# RVM Bash Completion
+[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
+
+
+for file in /usr/local/etc/bash_completion.d ; do
+  if [ -f "$file" ] ; then
+    . "$file"
+  fi
+done
+
 # Given characters awared history search
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
 alias bpr="source ~/.bash_profile"
-alias bp="mate ~/.bash_profile"
-
-# for ssh tunneling
-
-alias ston="sudo networksetup -setsocksfirewallproxystate Wi-Fi on&&ssh -Nf root@eduisevpn -D 127.0.0.1:1080"
-alias stoff="sudo networksetup -setsocksfirewallproxystate Wi-Fi off&&sudo killall ssh"
+alias bp="code ~/.bash_profile"
 
 # for ls
 alias lsf="ls -aFhlG"
@@ -25,6 +63,7 @@ alias lsa="ls -a"
 alias lsl="ls -l"
 
 # for routine dir
+alias ~~="cd ~"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -37,9 +76,15 @@ alias cdcg="cd ~/code/github.com"
 alias cdcgx="cd ~/code/github.com/xiaolai.github.com"
 alias cdcgxm="cd ~/code/github.com/xiaolai.github.com&&mate ~/code/github.com/xiaolai.github.com"
 alias cdcgxs="cd ~/code/github.com/xiaolai.github.com&&s ~/code/github.com/xiaolai.github.com/xiaolai@github.com.sublime-project"
+alias cdcloud="cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/"
+alias cdhexo="cd ~/Dropbox/xiaolai.github.io"
+alias cdinb="~/Library/Mobile Documents/com~apple~CloudDocs/inblockchain-hexo"
+alias hd="hexo clean && hexo generate && hexo deploy"
+alias hs="hexo clean && hexo generate && hexo server"
 
 # for xiaolai.github.com and octopress
 alias ogd="rake generate && rake deploy && open http://xiaolai.github.com"
+
 
 # for routine websites:
 alias openrc="open http://ruby-china.org"
@@ -74,97 +119,71 @@ alias gph='git push heroku'
 alias gphm='git push heroku master'
 alias gcdf='git clean -d -f'
 
-#for jekyll site
-alias jbm="cd ~/code/github.com/b4rails.github.com && mate . &&open http://0.0.0.0:4000 && jekyll --server"
-alias jbp="cd ~/code/github.com/b4rails.github.com && rake push && open http://b4rails.com"
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
-# RVM Customized Shell Prompt
-[[ -s "$HOME/.rvm/contrib/ps1_functions" ]] && source "$HOME/.rvm/contrib/ps1_functions"
-ps1_set --prompt ⌘
-
-# RVM Bash Completion
-[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
-
-#for git bash_completion
-# source /usr/local/etc/bash_completion.d/git-completion.bash
-
-for file in /usr/local/etc/bash_completion.d ; do
-  if [ -f "$file" ] ; then
-    . "$file"
-  fi
-done
-
-# for git using TextMate as Editor
-export EDITOR="/usr/local/bin/mate -w"
-
-# find in $directory where $name and open with TextMate
-fmate(){
-  find $1 -type d -name $2 -exec mate {} \;
+#   extract:  Extract most know archives with one command
+#   https://natelandau.com/my-mac-osx-bash_profile/
+#   ---------------------------------------------------------
+extract () {
+    if [ -f $1 ] ; then
+      case $1 in
+        *.tar.bz2)   tar xjf $1     ;;
+        *.tar.gz)    tar xzf $1     ;;
+        *.bz2)       bunzip2 $1     ;;
+        *.rar)       unrar e $1     ;;
+        *.gz)        gunzip $1      ;;
+        *.tar)       tar xf $1      ;;
+        *.tbz2)      tar xjf $1     ;;
+        *.tgz)       tar xzf $1     ;;
+        *.zip)       unzip $1       ;;
+        *.Z)         uncompress $1  ;;
+        *.7z)        7z x $1        ;;
+        *)     echo "'$1' cannot be extracted via extract()" ;;
+          esac
+      else
+          echo "'$1' is not a valid file"
+      fi
 }
 
+#   cdf:  'Cd's to frontmost window of MacOS Finder
+#   ------------------------------------------------------
+cdf () {
+    currFolderPath=$( /usr/bin/osascript <<EOT
+        tell application "Finder"
+            try
+        set currFolder to (folder of the front window as alias)
+            on error
+        set currFolder to (path to desktop folder as alias)
+            end try
+            POSIX path of currFolder
+        end tell
+EOT
+    )
+    echo "cd to \"$currFolderPath\""
+    cd "$currFolderPath"
+}
 
-# do ". acd_func.sh"
-# acd_func 1.0.5, 10-nov-2004
-# petar marinov, http:/geocities.com/h2428, this is public domain
+#   ---------------------------
+#   4. SEARCHING
+#   ---------------------------
 
-# cd_func ()
-# {
-#   local x2 the_new_dir adir index
-#   local -i cnt
-# 
-#   if [[ $1 ==  "--" ]]; then
-#     dirs -v
-#     return 0
-#   fi
-# 
-#   the_new_dir=$1
-#   [[ -z $1 ]] && the_new_dir=$HOME
-# 
-#   if [[ ${the_new_dir:0:1} == '-' ]]; then
-#     #
-#     # Extract dir N from dirs
-#     index=${the_new_dir:1}
-#     [[ -z $index ]] && index=1
-#     adir=$(dirs +$index)
-#     [[ -z $adir ]] && return 1
-#     the_new_dir=$adir
-#   fi
-# 
-#   #
-#   # '~' has to be substituted by ${HOME}
-#   [[ ${the_new_dir:0:1} == '~' ]] && the_new_dir="${HOME}${the_new_dir:1}"
-# 
-#   #
-#   # Now change to the new dir and add to the top of the stack
-#   pushd "${the_new_dir}" > /dev/null
-#   [[ $? -ne 0 ]] && return 1
-#   the_new_dir=$(pwd)
-# 
-#   #
-#   # Trim down everything beyond 11th entry
-#   popd -n +11 2>/dev/null 1>/dev/null
-# 
-#   #
-#   # Remove any other occurence of this dir, skipping the top of the stack
-#   for ((cnt=1; cnt <= 10; cnt++)); do
-#     x2=$(dirs +${cnt} 2>/dev/null)
-#     [[ $? -ne 0 ]] && return 0
-#     [[ ${x2:0:1} == '~' ]] && x2="${HOME}${x2:1}"
-#     if [[ "${x2}" == "${the_new_dir}" ]]; then
-#       popd -n +$cnt 2>/dev/null 1>/dev/null
-#       cnt=cnt-1
-#     fi
-#   done
-# 
-#   return 0
-# }
-# 
-# alias cdha="cd_func --"
-# alias cdh="cd_func"
-# 
-# if [[ $BASH_VERSION > "2.05a" ]]; then
-#   # ctrl+w shows the menu
-#   bind -x "\"\C-w\":cd_func -- ;"
-# fi
+alias qfind="find . -name "                 # qfind:    Quickly search for file
+ff () { /usr/bin/find . -name "$@" ; }      # ff:       Find file under the current directory
+ffs () { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
+ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
+
+#   spotlight: Search for a file using MacOS Spotlight's metadata
+#   -----------------------------------------------------------
+spotlight () { mdfind "kMDItemDisplayName == '$@'wc"; }
+
+# ii:  display useful host related informaton
+#   -------------------------------------------------------------------
+ii() {
+    echo -e "\nYou are logged on ${RED}$HOST"
+    echo -e "\nAdditionnal information:$NC " ; uname -a
+    echo -e "\n${RED}Users logged on:$NC " ; w -h
+    echo -e "\n${RED}Current date :$NC " ; date
+    echo -e "\n${RED}Machine stats :$NC " ; uptime
+    echo -e "\n${RED}Current network location :$NC " ; scselect
+    echo -e "\n${RED}Public facing IP Address :$NC " ;myip
+    #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
+    echo
+}
