@@ -210,9 +210,9 @@ EOT
 #   ---------------------------
 
 alias qfind="find . -name "                 # qfind:    Quickly search for file
-ff () { /usr/bin/find . -name "$@" ; }      # ff:       Find file under the current directory
-ffs () { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
-ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
+ff () { /usr/bin/find . -name "$@" 2>/dev/null; }      # ff:       Find file under the current directory
+ffs () { /usr/bin/find . -name "$@"'*' 2>/dev/null; }  # ffs:      Find file whose name starts with a given string
+ffe () { /usr/bin/find . -name '*'"$@" 2>/dev/null; }  # ffe:      Find file whose name ends with a given string
 
 #   spotlight: Search for a file using MacOS Spotlight's metadata
 #   -----------------------------------------------------------
