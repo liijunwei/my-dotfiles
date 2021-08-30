@@ -71,7 +71,7 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-# plugins=(git)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,155 +102,32 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 
-# If you come from bash you might have to change your $PATH.
 
+###########################################################
+# Aliases
+###########################################################
+source $HOME/.aliases
+source $HOME/.functions
+
+###########################################################
+# for nvm
+###########################################################
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+###########################################################
+# for Android Studio / Emulator
+###########################################################
+
+
+###########################################################
+# for nvm
+###########################################################
 export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 export PATH=$PATH:$HOME/Library/Android/sdk/tools
-export ANDROID_HOME=/$HOME/Library/Android/sdk
+export ANDROID_HOME=$HOME/Library/Android/sdk
 export ANDROID_AVD_HOME=$HOME/.android/avd
 export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
-export PATH=/Applications/Sublime\ Text.app/Contents/SharedSupport/bin:$PATH
-export NVM_DIR="$HOME/.nvm"
 
-# ALIAS
-# install homebrew:
-# arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-alias brew='arch -x86_64 brew'
-
-alias pixel="$ANDROID_SDK_ROOT/emulator/emulator @Pixel"
-alias ~="cd ~"
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias cdre="cd ~/github/xiaolai/regular-investing-in-box"
-alias rich='cd ~/github/xiaolai/regular-investing-in-box && git pull && open data/box-historical-price-change.png'
-# for ls
-alias lsf="ls -aFhlG"
-alias lsa="ls -a"
-alias lsl="ls -l"
-# edit zshrc
-alias zsr="source ~/.zshrc"
-alias zs="subl ~/.zshrc"
-
-#for git
-alias git='/usr/local/Cellar/git/2.33.0/bin/git'
-alias ginit='git init&&git add .&&git commit -m "Initial Commit"'
-alias gla='git log --oneline --decorate --all'
-alias glt='git log --oneline --decorate --all --graph'
-alias glts='git log --oneline --decorate --all --graph --simplsify-by-decoration'
-alias g="git status"
-alias gaa="git add ."
-alias gc='git checkout'
-alias gca='git checkout .'
-alias gcb='git checkout -b'
-alias gcm='git checkout master'
-alias gbr='git branch'
-alias gcam='git commit -am'
-alias gp='git push'
-alias gpuom='git push -u origin master'
-alias gph='git push heroku'
-alias gphm='git push heroku master'
-alias gcdf='git clean -d -f'
-
-#for jupyter
-alias jpu="launchctl unload ~/Library/LaunchAgents/com.jupyter.lab.plist"
-alias jpl="launchctl load ~/Library/LaunchAgents/com.jupyter.lab.plist"
-alias jpr="jpu && jpl"
-
-# for Mixin Messenger
-alias m2="cd ~/github/xiaolai/mixin-desktop && yarn electron:serve"
-
-
-# FUNCTIONS
-
-#   extract:  Extract most know archives with one command
-#   https://natelandau.com/my-mac-osx-bash_profile/
-#   ---------------------------------------------------------
-extract () {
-    if [ -f $1 ] ; then
-      case $1 in
-        *.tar.bz2)   tar xjf $1     ;;
-        *.tar.gz)    tar xzf $1     ;;
-        *.bz2)       bunzip2 $1     ;;
-        *.rar)       unrar e $1     ;;
-        *.gz)        gunzip $1      ;;
-        *.tar)       tar xf $1      ;;
-        *.tbz2)      tar xjf $1     ;;
-        *.tgz)       tar xzf $1     ;;
-        *.zip)       unzip $1       ;;
-        *.Z)         uncompress $1  ;;
-        *.7z)        7z x $1        ;;
-        *)     echo "'$1' cannot be extracted via extract()" ;;
-          esac
-      else
-          echo "'$1' is not a valid file"
-      fi
-}
-
-#   cdf:  'Cd's to frontmost window of MacOS Finder
-#   ------------------------------------------------------
-cdf () {
-    currFolderPath=$( /usr/bin/osascript <<EOT
-        tell application "Finder"
-            try
-        set currFolder to (folder of the front window as alias)
-            on error
-        set currFolder to (path to desktop folder as alias)
-            end try
-            POSIX path of currFolder
-        end tell
-EOT
-    )
-    echo "cd to \"$currFolderPath\""
-    cd "$currFolderPath"
-}
-
-#   ---------------------------
-#   SEARCHING
-#   ---------------------------
-
-alias qfind="find . -name "                 # qfind:    Quickly search for file
-ff () { /usr/bin/find . -name "$@" 2>/dev/null; }      # ff:       Find file under the current directory
-ffs () { /usr/bin/find . -name "$@"'*' 2>/dev/null; }  # ffs:      Find file whose name starts with a given string
-ffe () { /usr/bin/find . -name '*'"$@" 2>/dev/null; }  # ffe:      Find file whose name ends with a given string
-
-#   spotlight: Search for a file using MacOS Spotlight's metadata
-#   -----------------------------------------------------------
-spotlight () { mdfind "kMDItemDisplayName == '$@'wc"; }
-
-# ii:  display useful host related informaton
-#   -------------------------------------------------------------------
-ii() {
-    echo -e "\nYou are logged on ${RED}$HOST"
-    echo -e "\nAdditionnal information:$NC " ; uname -a
-    echo -e "\n${RED}Users logged on:$NC " ; w -h
-    echo -e "\n${RED}Current date :$NC " ; date
-    echo -e "\n${RED}Machine stats :$NC " ; uptime
-    echo -e "\n${RED}Current network location :$NC " ; scselect
-    echo -e "\n${RED}Public facing IP Address :$NC " ;myip
-    #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
-    echo
-}
-
-compresspdf() {
-    gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -dPDFSETTINGS=/${3:-"screen"} -dCompatibilityLevel=1.4 -sOutputFile="$2" "$1"
-}
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/joker/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/joker/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/joker/opt/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/joker/opt/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-
-export NVM_DIR="$HOME/.nvm"
-  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion

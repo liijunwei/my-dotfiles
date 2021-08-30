@@ -1,0 +1,46 @@
+# ALIAS
+
+alias ~="cd ~"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias cdre="cd ~/github/xiaolai/regular-investing-in-box"
+alias rich='cd ~/github/xiaolai/regular-investing-in-box && git pull && open data/box-historical-price-change.png'
+# for ls
+alias lsf="ls -aFhlG"
+alias lsa="ls -a"
+alias lsl="ls -l"
+# edit zshrc
+alias zsr="source ~/.zshrc"
+alias zs="subl ~/.zshrc"
+alias za="subl ~/.aliases"
+alias zf="subl ~/.functions"
+
+#for git
+# alias git='/opt/homebrew/bin/git'
+alias ginit='git init&&git add .&&git commit -m "Initial Commit"'
+alias gla='git log --oneline --decorate --all'
+alias glt='git log --oneline --decorate --all --graph'
+alias glts='git log --oneline --decorate --all --graph --simplsify-by-decoration'
+alias g="git status"
+alias gaa="git add ."
+alias gc='git checkout'
+alias gca='git checkout .'
+alias gcb='git checkout -b'
+alias gcm='git checkout master'
+alias gbr='git branch'
+alias gcam='git commit -am'
+alias gp='git push'
+alias gpuom='git push -u origin master'
+alias gph='git push heroku'
+alias gphm='git push heroku master'
+alias gcdf='git clean -d -f'
+
+#for python
+alias python="python3"
+alias pip="pip3"
+
+#for jupyter
+alias jpu="launchctl unload ~/Library/LaunchAgents/com.jupyter.lab.plist"
+alias jpl="launchctl load ~/Library/LaunchAgents/com.jupyter.lab.plist"
+alias jpr="jpu && jpl"
