@@ -35,6 +35,7 @@ alias gpuom='git push -u origin master'
 alias gph='git push heroku'
 alias gphm='git push heroku master'
 alias gcdf='git clean -d -f'
+alias gu='gaa && gcam "Updated" && gpuom'
 
 #for python
 alias python="python3"
